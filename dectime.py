@@ -1,8 +1,8 @@
 from math import floor
 import time
-import sys
 
-class Clock:
+
+class DecimalClock:
     def __init__(self):
         self.didec = 0
         self.didia = 0
@@ -14,16 +14,16 @@ class Clock:
         self.tempo = self.tempo/60
         self.tempo = self.tempo/4
 
-    def dtime_scale(self, time, scale, limit=10):
-        return floor(time * scale % limit)
+    def dectime_scale(self, dectime, scale, limit=10):
+        return floor(dectime * scale % limit)
 
     def set_current_time(self):
-        dtime = time.time() / 1.25
-        self.disec = self.dtime_scale(dtime, 1)
-        self.dimin = self.dtime_scale(dtime, 1/10)
-        self.dihor = self.dtime_scale(dtime, 1/100)
-        self.didec = self.dtime_scale(dtime, 1/1000, 69.12)
-        self.didia = self.dtime_scale(dtime, 1/10000, sys.maxsize)
+        now = time.time() / 1.25  # 1 disec = 1.25 seconds
+        self.disec = self.dectime_scale(now, 1)
+        self.dimin = self.dectime_scale(now, 1/10)
+        self.dihor = self.dectime_scale(now, 1/100)
+        self.didec = self.dectime_scale(now, 1/1000, 69.12)
+        self.didia = self.dectime_scale(now, 1/10000, 365.25)
 
     def tick(self):
         self.corchea += 1
@@ -44,13 +44,17 @@ class Clock:
             self.didia += 1
         time.sleep(self.tempo)
 
-    def get_time(self):
+    def get_full_time(self):
         return f"{self.didia:.0f}dd {self.didec:.0f}dc {self.dihor:.0f}dh {self.dimin:.0f}dm {self.disec:.0f}ds {self.corchea:.0f}sc"
+
+    def get_time(self):
+        def add_zeros(x): return "0" + str(x) if x < 10 else str(x)
+        return f"{add_zeros(self.didec)}:{add_zeros(self.dihor)}:{add_zeros(self.dimin)}"
 
 
 if __name__ == "__main__":
-    clock = Clock()
+    clock = DecimalClock()
     clock.set_current_time()
     while True:
         clock.tick()
-        print(clock.get_time())
+        print(clock.get_full_time(), f"[{clock.get_time()}]")

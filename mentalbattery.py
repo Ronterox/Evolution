@@ -1,0 +1,55 @@
+import tkinter as tk
+from random import randint
+from math import floor
+
+# TODO: Add focus lost if did activities that reduced mental
+
+# Create a battery like UI, with a bar that fills up as you check the boxes of the activities
+activities = ["sleep", "train", "learn", "evolution", "play", "music", "waifu", "irl"]
+done = [x for x in activities[:randint(1, len(activities) // 2)]]
+    
+def create_mentalhealth_battery(activities, done):
+    activities = sorted(activities, key=lambda x: x in done, reverse=True)
+
+    root = tk.Tk()
+    root.title("Mental Health")
+    root.resizable(False, False)
+    root.overrideredirect(True)
+    root.configure(bg="#000000", padx=10, pady=10)
+
+    x, y = root.winfo_screenwidth() - root.winfo_reqwidth(), 0
+    root.geometry(f"+{x}+{y}")
+
+    # Draw the battery from top to bottom
+    energy = len(done) / len(activities)
+    batt_color = floor(energy * 255)
+    batt_color = f"#{255 - batt_color:02x}{batt_color:02x}00"
+
+    energy_label = tk.Label(root, text=f"{floor(energy * 100)}%", bg=batt_color)
+    energy_label.pack(fill=tk.X, pady=5)
+
+    for i, activity in enumerate(activities[::-1]):
+        ischarge = len(activities) - i <= len(done)
+        bg, fg = (batt_color, "black") if ischarge else ("#000000", "gray")
+
+        fill = tk.Frame(root, bg=bg, height=20)
+        fill.pack(fill=tk.X, pady=1)
+
+        label = tk.Label(fill, text=activity.upper(), bg=bg, fg=fg, font="Helvetica 20 bold")
+        label.pack(fill=tk.X, padx=5, pady=5)
+
+        def on_click(_, activity=activity):
+            if activity in done:
+                done.remove(activity)
+            else:
+                done.append(activity)
+            root.destroy()
+            create_mentalhealth_battery(activities, done)
+        
+        fill.bind("<Button-1>", on_click)
+        label.bind("<Button-1>", on_click)
+
+    root.mainloop()
+
+if __name__ == "__main__":
+    create_mentalhealth_battery(activities, done)

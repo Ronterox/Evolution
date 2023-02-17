@@ -12,8 +12,6 @@ def create_mentalhealth_battery(activities, done):
     activities = sorted(activities, key=lambda x: x in done, reverse=True)
 
     root = tk.Tk()
-    root.title("Mental Health")
-    root.resizable(False, False)
     root.overrideredirect(True)
     root.configure(bg="#000000", padx=10, pady=10)
 

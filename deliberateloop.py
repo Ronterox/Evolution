@@ -1,7 +1,7 @@
 import tkinter as tk
 from typing import List, Tuple
 
-activities_loop: Tuple[List[str], List[str]] = (["video", "read"], ["programming", "physical status"])
+activities_loop: Tuple[List[str], List[str]] = (["video", "read", "mine"], ["programming", "physical status"])
 states_loop = [0, 0]
 index = 0
 
@@ -28,10 +28,10 @@ def create_deliberate_loop():
         fill = tk.Frame(root, bg=bg, height=20)
         fill.pack(fill=tk.X, pady=1)
         
-        if activities == activities_loop[index - 1]:
-            states_loop[index] = (states_loop[index] + 1) % len(activities)
+        activity = activities[states_loop[i]]
 
-        activity = activities[states_loop[i - 1]]
+        if activities == activities_loop[index]:
+            states_loop[index] = (states_loop[index] + 1) % len(activities)
 
         label = tk.Label(fill, text=activity.upper(), bg=bg, fg=fg, font="Helvetica 20 bold")
         label.pack(fill=tk.X, padx=5, pady=5)

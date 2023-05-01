@@ -26,11 +26,6 @@ def show_message(check):
         popup.configure(bg="#000000")
         popup.overrideredirect(True)
 
-        # Center the window
-        x = root.winfo_screenwidth() // 2
-        y = root.winfo_screenheight() // 2
-        popup.geometry(f"+{x}+{y}")
-        
         # Draw the message
         label = tk.Label(popup, text=MESSAGE, bg="#000000", fg="#ffffff", font="Helvetica 20 bold")
         label.pack(fill=tk.X, padx=5, pady=5)
@@ -58,10 +53,14 @@ def show_message(check):
         button = tk.Button(popup, text="OK", command=popup.destroy, bg="#000000", fg="#ffffff", font="Helvetica 20 bold")
         button.pack(fill=tk.X, padx=5, pady=5)
 
+        # Center the window
+        popup.update_idletasks()
+        x = (root.winfo_screenwidth() - popup.winfo_width()) // 2
+        y = (root.winfo_screenheight() - popup.winfo_height()) // 2
+        popup.geometry(f"+{x}+{y}")
+
         popup.grab_set()
         popup.wait_window()
-
-        exit()
         
         # Linux lock screen
         os.system("xdg-screensaver lock")

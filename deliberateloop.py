@@ -1,7 +1,14 @@
 import tkinter as tk
 from typing import List, Tuple
+from argparse import ArgumentParser
 
-activities_loop: Tuple[List[str], List[str]] = (["video", "read", "mine"], ["programming", "physical status"])
+parser = ArgumentParser("Activities looper, create combination of activities and routines", epilog='Usage Example: python filename.py --left activity1,activity2,activity3 --right activity4,activity5')
+parser.add_argument("--left", type=str, help="One side of the activities to combine")
+parser.add_argument("--right", type=str, help="Other side of the activities to combine")
+
+args = parser.parse_args()
+
+activities_loop: Tuple[List[str], List[str]] = (args.left.split(','), args.right.split(','))
 states_loop = [0, 0]
 index = 0
 
@@ -27,7 +34,7 @@ def create_deliberate_loop():
 
         fill = tk.Frame(root, bg=bg, height=20)
         fill.pack(fill=tk.X, pady=1)
-        
+
         activity = activities[states_loop[i]]
 
         if activities == activities_loop[index]:
@@ -35,9 +42,9 @@ def create_deliberate_loop():
 
         label = tk.Label(fill, text=activity.upper(), bg=bg, fg=fg, font="Helvetica 20 bold")
         label.pack(fill=tk.X, padx=5, pady=5)
-        
+
         label.bind("<Button-1>", on_click)
-    
+
     print(states_loop)
 
     root.mainloop()
